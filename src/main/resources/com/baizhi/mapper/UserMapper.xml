@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baizhi.dao.UserMapper">
+<select id="queryAllPage" parameterType="Integer">
+    select id,phone,head_img headImg,name,sign,wechat,status,regist_time registTime from yx_user limit #{page},#{rows}
+</select>
+    <insert id="addUser" parameterType="User">
+        insert into yx_user values(#{id},#{phone},#{headImg},#{name},#{sign},#{wechat},#{status},#{registTime})
+    </insert>
+    <delete id="deleteUser" parameterType="String">
+        delete  from  yx_user where id=#{id}
+    </delete>
+    <update id="updateUser" parameterType="User">
+        update yx_user
+        <set>
+            <if test="id!=null">id=#{id},</if>
+            <if test="phone!=null">phone=#{phone},</if>
+            <if test="headImg!=null">headImg=#{headImg},</if>
+            <if test="name!=null">name=#{name},</if>
+            <if test="sign!=null">sign=#{sign},</if>
+            <if test="wechat!=null">wechat=#{wechat},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="registTime!=null">registTime=#{registTime},</if>
+        </set>
+        where id =#{id}
+    </update>
+</mapper>

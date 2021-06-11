@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.FeedBackMapper">
+        <resultMap id="rm1" type="FeedBack">
+            <id column="sid" property="id"/>
+            <result column="suserId" property="userId"/>
+            <result column="stitle" property="title"/>
+            <result column="sfeedTime" property="feedTime"/>
+            <result column="scontent" property="content"/>
+            <association property="user" javaType="User">
+                <id column="uid" property="id"/>
+                <result column="uphone" property="phone"/>
+                <result column="uheadImg" property="headImg"/>
+                <result column="uname" property="name"/>
+                <result column="usign" property="sign"/>
+                <result column="uwechat" property="wechat"/>
+                <result column="ustatus" property="status"/>
+                <result column="ugistTime" property="registTime"/>
+            </association>
+        </resultMap>
+
+        <select id="queryByPage" resultMap="rm1">
+            select s.id sid,s.user_id suserId,s.title stitle,s.feed_time sfeedTime,s.content scontent,
+            u.id uid,u.phone uphone,u.head_img uheadImg,u.name uname,u.sign usign,
+            u.wechat uwechat, u.status ustatus,u.regist_time uregistTime
+            from yx_feedback s left join yx_user u
+            on s.user_id=u.id
+            limit #{page},#{rows}
+        </select>
+
+        <select id="queryByCount" resultType="Integer">
+            select count(*) from yx_feedback
+        </select>
+    <insert id="add" parameterType="FeedBack">
+        insert into yx_feedback values(#{id},#{title},#{content},#{userId},#{feedTime})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete from yx_feedback where id =#{id}
+    </delete>
+    <update id="update" parameterType="FeedBack">
+        update  yx_feedback
+        <set>
+        <if test="id!=null">id=#{id},</if>
+        <if test="userId!=null">user_id=#{userId},</if>
+        <if test="title!=null">title=#{title},</if>
+        <if test="feedTime!=null">feed_time=#{feedTime},</if>
+        <if test="content!=null">content=#{content},</if>
+        </set>
+        where id =#{id}
+    </update>
+</mapper>
